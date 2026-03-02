@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./project_two/chatbot_service/chatbot_service"
+    ]
+}

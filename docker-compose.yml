@@ -1,0 +1,90 @@
+# services:
+#   service1:
+#     build: ./Project_one
+#     container_name: service1_container
+#     ports:
+#       - "8001:8000"
+#     volumes:
+#       - ./Project_one:/app
+#     restart: always
+
+#   service2:
+#     build: ./project_two
+#     container_name: service2_container
+#     ports:
+#       - "8002:8000"
+#     volumes:
+#       - ./project_two:/app
+#     restart: always
+
+#   service3:
+#     build: ./Project_three
+#     container_name: service3_container
+#     ports:
+#       - "8003:8000"
+#     volumes:
+#       - ./Project_three:/app
+#     restart: always
+
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: tenantiq_db_v2
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0494
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+
+  service1:
+    build: ./Project_one
+    container_name: service1_container
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./Project_one:/app
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+
+  service2:
+    build: ./project_two
+    container_name: service2_container
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./project_two:/app
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+
+  service3:
+    build: ./Project_three
+    container_name: service3_container
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./Project_three:/app
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+
+volumes:
+  postgres_data:
