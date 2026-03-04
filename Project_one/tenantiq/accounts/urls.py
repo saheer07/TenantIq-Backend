@@ -60,35 +60,4 @@ urlpatterns = [
 
     # ================= SUBSCRIPTION =================
     path("subscription/status/", CheckSubscriptionStatusView.as_view(), name="subscription-status"),
-
-    # ================= USER MANAGEMENT =================
-    # Short paths
-    path("users/", UserListCreateView.as_view(), name="user-list-create"),
-    path("users/create/", CreateUserView.as_view(), name="user-create"),
-    path("users/manage/", UserManagementView.as_view(), name="user-manage"),
-    path("users/<uuid:pk>/", UserDetailView.as_view(), name="user-detail"),
-    path("users/<uuid:pk>/toggle-active/", UserToggleActiveView.as_view(), name="user-toggle-active"),
-    path("users/<uuid:pk>/change-role/", UserChangeRoleView.as_view(), name="user-change-role"),
-
-    # ✅ Prefixed paths — matches what the frontend actually calls:
-    # /api/auth/user-management/users/
-    path("user-management/users/", UserManagementView.as_view(), name="user-management-list"),
-    path("user-management/users/create/", CreateUserView.as_view(), name="user-management-create"),
-    path("user-management/users/<uuid:pk>/", UserDetailView.as_view(), name="user-management-detail"),
-    path("user-management/users/<uuid:pk>/toggle-active/", UserToggleActiveView.as_view(), name="user-management-toggle"),
-    path("user-management/users/<uuid:pk>/change-role/", UserChangeRoleView.as_view(), name="user-management-role"),
-
-    # ================= TENANTS =================
-    path("tenants/", TenantListCreateView.as_view(), name="tenant-list-create"),
-    path("tenants/<uuid:pk>/", TenantDetailView.as_view(), name="tenant-detail"),
-    path("tenants/<uuid:pk>/stats/", TenantStatsView.as_view(), name="tenant-stats"),
-    path("tenants/<uuid:pk>/change-plan/", TenantChangePlanView.as_view(), name="tenant-change-plan"),
-
-    # ================= AUDIT LOGS =================
-    path("audit-logs/", AuditLogListView.as_view(), name="audit-log-list"),
-    path("audit-logs/<uuid:pk>/", AuditLogDetailView.as_view(), name="audit-log-detail"),
-
-    # ================= AI USAGE =================
-    path("ai-usage/", AIUsageLogListView.as_view(), name="ai-usage-log-list"),
-    path("ai-usage/<uuid:pk>/", AIUsageLogDetailView.as_view(), name="ai-usage-log-detail"),
 ]

@@ -265,7 +265,8 @@ class TenantSettingsViewSet(viewsets.ModelViewSet):
 # ==================== CHAT QUERY VIEW ====================
 
 MAX_CONTEXT_CHARS = getattr(settings, 'MAX_CONTEXT_CHARS', 12000)
-STRICT_FALLBACK_MESSAGE = "The requested information is not available in the uploaded document."
+STRICT_FALLBACK_MESSAGE = "Information not available in the current document context."
+NO_DOCS_MESSAGE = "No documents are currently uploaded for this tenant."
 SUPPORTED_FILE_TYPES = [
     'application/pdf',
     'application/msword',
@@ -346,12 +347,17 @@ class ChatQueryView(APIView):
                     indexing_status='indexed'
                 ).values_list('id', flat=True))
 
-                search_filter = None
-                if active_doc_ids:
-                    search_filter = {'document_id': {'$in': [str(d) for d in active_doc_ids]}}
-                    logger.info(f"[CHAT] Filtering by {len(active_doc_ids)} indexed documents")
-                else:
+                if not active_doc_ids:
                     logger.warning(f"[CHAT] No indexed documents found for tenant {tenant_id_str}")
+                    return Response({
+                        'conversation_id': str(conversation.id),
+                        'response': NO_DOCS_MESSAGE,
+                        'sources': [],
+                        'has_context': False
+                    }, status=status.HTTP_200_OK)
+
+                search_filter = {'document_id': {'$in': [str(d) for d in active_doc_ids]}}
+                logger.info(f"[CHAT] Filtering by {len(active_doc_ids)} indexed documents")
 
                 results = vector_store.query(
                     tenant_id=tenant_id_str,
@@ -360,15 +366,7 @@ class ChatQueryView(APIView):
                     filter_metadata=search_filter
                 )
 
-                if results['count'] == 0 and search_filter:
-                    logger.info("[CHAT] Filter returned 0 -- falling back to unfiltered search")
-                    results = vector_store.query(
-                        tenant_id=tenant_id_str,
-                        query_embedding=query_embedding,
-                        n_results=k_val
-                    )
-
-                logger.info(f"Vector search returned {results['count']} documents")
+                logger.info(f"Vector search returned {results['count']} documents (Filter active: {bool(search_filter)})")
             except Exception as e:
                 logger.error(f"Vector store search error: {e}", exc_info=True)
 
@@ -485,7 +483,7 @@ class ChatQueryView(APIView):
                     "If the answer is in the documents, give a clear, factual, direct response. "
                     "Use professional Markdown: tables for tabular data, bullet points for lists, bold for key terms. "
                     "Do not use general knowledge. Do not guess. Only use provided document data. "
-                    "If information is missing say: 'The requested information is not available in the uploaded document.' "
+                    "If information is missing say: 'Information not available in the current document context.' "
                     "Return only the answer with NO technical metadata or document IDs."
                 )
 
@@ -852,28 +850,42 @@ class DocumentDeleteWebhookView(APIView):
 
             logger.info(f"[WEBHOOK] Delete request -- document: {document_id}, tenant: {tenant_id}")
 
+            # ── IMMEDIATE LOCKOUT (Synchronous) ──
+            # Delete index and citation records immediately so they are hidden from the retriever,
+            # even if the background vector store purge is still pending.
             try:
-                num_deleted = vector_store.delete_document(str(tenant_id), str(document_id))
-                logger.info(f"[WEBHOOK] Deleted {num_deleted} chunks from vector store")
-            except Exception as e:
-                logger.error(f"[WEBHOOK] Vector store deletion error: {e}")
+                from django.db import transaction
+                from .models import DocumentIndex, MessageSource
 
+                with transaction.atomic():
+                    sources_deleted, _ = MessageSource.objects.filter(document_id=document_id).delete()
+                    docs_deleted, _ = DocumentIndex.objects.filter(id=document_id).delete()
+
+                    if sources_deleted or docs_deleted:
+                        logger.info(f"[WEBHOOK] Immediate lockout: deleted {docs_deleted} index and {sources_deleted} source records for {document_id}")
+            except Exception as lockout_e:
+                logger.error(f"[WEBHOOK] Sync lockout failed for {document_id}: {lockout_e}")
+
+            # ── ASYNC PURGE (Background) ──
             try:
-                doc_record = DocumentIndex.objects.filter(id=document_id).first()
-                if doc_record:
-                    sources_count = MessageSource.objects.filter(document=doc_record).count()
-                    doc_record.delete()
-                    logger.info(f"[WEBHOOK] Deleted DocumentIndex {document_id} and {sources_count} sources")
-                else:
-                    logger.info(f"[WEBHOOK] No DocumentIndex record found for {document_id}")
+                from .tasks import delete_document_task
+                delete_document_task.delay(str(document_id), str(tenant_id))
+                logger.info(f"[WEBHOOK] Queued delete_document_task for {document_id}")
             except Exception as e:
-                logger.error(f"[WEBHOOK] Local DB deletion error: {e}")
+                logger.error(f"[WEBHOOK] Failed to queue delete task: {e}")
+                # Fallback to sync deletion if Celery fails
+                try:
+                    num_deleted = vector_store.delete_document(str(tenant_id), str(document_id))
+                    DocumentIndex.objects.filter(id=document_id).delete()
+                    logger.info(f"[WEBHOOK] Synced deletion fallback for {document_id} (chunks: {num_deleted})")
+                except Exception as sync_e:
+                    logger.error(f"[WEBHOOK] Sync deletion fallback failed: {sync_e}")
 
             return Response({
-                'status':      'success',
+                'status':      'accepted',
                 'document_id': str(document_id),
-                'message':     'Document removal synced'
-            }, status=status.HTTP_200_OK)
+                'message':     'Document deletion queued'
+            }, status=status.HTTP_202_ACCEPTED)
 
         except Exception as e:
             logger.error(f"[WEBHOOK] Unexpected delete webhook error: {e}", exc_info=True)
@@ -993,47 +1005,5 @@ class HealthCheckView(APIView):
         })
 
 
-class TriggerDocumentIndexView(APIView):
-    permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        document_id = request.data.get('document_id')
-        if not document_id:
-            return Response({'error': 'document_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            auth_header = request.headers.get('Authorization')
-            headers     = {'Authorization': auth_header} if auth_header else {}
-            doc_url     = f'http://localhost:8003/api/documents/{document_id}/'
-
-            doc_response = requests.get(doc_url, headers=headers, timeout=10)
-            doc_response.raise_for_status()
-            document = doc_response.json()
-
-            file_url = document.get('file')
-            if not file_url:
-                return Response({'error': 'Document has no file attached'}, status=status.HTTP_400_BAD_REQUEST)
-
-            if not file_url.startswith('http'):
-                file_url = f'http://localhost:8003{file_url if file_url.startswith("/") else "/" + file_url}'
-
-            requests.get(file_url, headers=headers, timeout=30).raise_for_status()
-
-            try:
-                requests.post(
-                    f'http://localhost:8003/api/documents/{document_id}/update-index-status/',
-                    json={'indexing_status': 'completed'},
-                    headers=headers, timeout=5
-                )
-            except Exception as e:
-                logger.warning(f"Failed to update index status: {e}")
-
-            return Response({'status': 'success', 'document_id': document_id, 'message': 'Document indexed successfully'})
-
-        except requests.exceptions.Timeout:
-            return Response({'error': 'Request timed out'}, status=status.HTTP_504_GATEWAY_TIMEOUT)
-        except requests.exceptions.ConnectionError:
-            return Response({'error': 'Cannot connect to upload service'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
-        except Exception as e:
-            logger.error(f"Indexing failed: {e}", exc_info=True)
-            return Response({'error': f'Indexing failed: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+# End of views

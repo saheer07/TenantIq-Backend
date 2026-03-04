@@ -201,11 +201,20 @@ class APIKeyAuthentication(BaseAuthentication):
         if signature:
             import hmac
             import hashlib
+            import json
             
-            body = request.body
+            # Use canonical JSON formatting to match the sender
+            body_data = request.data
+            canonical_body = json.dumps(
+                body_data, 
+                sort_keys=True, 
+                separators=(',', ':'),
+                default=str
+            ).encode('utf-8')
+            
             expected_signature = hmac.new(
                 expected_key.encode(),
-                body,
+                canonical_body,
                 hashlib.sha256
             ).hexdigest()
             
@@ -213,7 +222,7 @@ class APIKeyAuthentication(BaseAuthentication):
                 logger.debug("[APIKeyAuth] HMAC signature validated successfully")
                 return (WebhookUser(), signature)
             else:
-                logger.warning(f"[APIKeyAuth] Invalid HMAC signature provided: {signature[:10]}...")
+                logger.warning(f"[APIKeyAuth] Invalid HMAC signature. Provided: {signature[:10]}... Expected: {expected_signature[:10]}...")
                 raise AuthenticationFailed('Invalid webhook signature')
 
         # ── Step 2: Fallback to static API Key (Legacy/Internal) ───────────

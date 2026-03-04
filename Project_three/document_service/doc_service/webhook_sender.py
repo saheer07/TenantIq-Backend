@@ -111,12 +111,18 @@ class WebhookSender:
     # PRIVATE HELPERS
     # ----------------------------------------------------------
     def _attempt(self, endpoint, payload, headers, attempt) -> bool:
-        body = json.dumps(payload, default=str)
+        # Use canonical JSON formatting for consistency
+        body = json.dumps(
+            payload, 
+            sort_keys=True, 
+            separators=(',', ':'),
+            default=str
+        )
         logger.debug(f"[WEBHOOK] POST attempt={attempt} -> {endpoint}")
 
         response = requests.post(
             endpoint,
-            data=body,
+            data=body.encode('utf-8'),
             headers=headers,
             timeout=self.REQUEST_TIMEOUT,
         )
@@ -150,7 +156,13 @@ class WebhookSender:
 
     def _build_headers(self, payload, event_type, delivery_id) -> Dict:
         """Build secure headers with HMAC-SHA256 signature."""
-        body = json.dumps(payload, default=str)
+        # Use canonical JSON formatting for signature
+        body = json.dumps(
+            payload, 
+            sort_keys=True, 
+            separators=(',', ':'),
+            default=str
+        )
         signature = self._sign(body)
 
         return {

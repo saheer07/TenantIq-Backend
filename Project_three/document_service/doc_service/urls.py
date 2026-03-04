@@ -16,6 +16,7 @@ from .views import (
     DocumentAccessLogView,
     BulkDocumentOperationsView,
     DocumentReIndexView,
+    ActiveDocumentIDsView,
 )
 
 urlpatterns = [
@@ -36,4 +37,7 @@ urlpatterns = [
     
     # Bulk operations
     path('bulk-operations/', BulkDocumentOperationsView.as_view(), name='bulk-operations'),
+
+    # Internal reconciliation
+    path('internal/active-document-ids/', ActiveDocumentIDsView.as_view(), name='active-document-ids'),
 ]

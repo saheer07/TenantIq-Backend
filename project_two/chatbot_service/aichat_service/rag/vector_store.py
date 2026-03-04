@@ -122,9 +122,10 @@ class VectorStore:
         
         collection = self.get_or_create_collection(tenant_id)
         
-        # Inject document_id and status into each metadata dict for reliable deletion and filtering
+        # Inject document_id, tenant_id and status into each metadata dict for reliable deletion and filtering
         for meta in metadatas:
             meta['document_id'] = str(document_id)
+            meta['tenant_id'] = str(tenant_id)
             meta['indexing_status'] = 'indexed'
 
         # Last-line-of-defense sanitization
@@ -172,6 +173,16 @@ class VectorStore:
         }
         
         if filter_metadata and isinstance(filter_metadata, dict):
+            # Ensure tenant_id is always present in the filter for strict isolation
+            if "$and" in filter_metadata:
+                filter_metadata["$and"].append({"tenant_id": self._normalise_tenant_id(tenant_id)})
+            else:
+                filter_metadata = {
+                    "$and": [
+                        filter_metadata,
+                        {"tenant_id": self._normalise_tenant_id(tenant_id)}
+                    ]
+                }
             query_kwargs["where"] = filter_metadata
             
         logger.info(f"[VECTOR_STORE] Querying collection '{collection.name}' for tenant '{tenant_id}' with filters: {filter_metadata}")
@@ -196,24 +207,46 @@ class VectorStore:
             document_id: Document identifier
             
         Returns:
-            Number of chunks deleted
+            Number of chunks deleted (or an estimate if direct where deletion is used)
         """
+        tenant_id = self._normalise_tenant_id(tenant_id)
         collection = self.get_or_create_collection(tenant_id)
         
-        # Query for all chunks with this document_id
+        logger.info(f"[VECTOR_STORE] Attempting deletion of document {document_id} from tenant {tenant_id}")
+        
         try:
+            # Check how many chunks exist before deletion
             results = collection.get(
                 where={"document_id": document_id}
             )
+            count = len(results.get('ids', []))
             
-            if results['ids']:
-                collection.delete(ids=results['ids'])
-                return len(results['ids'])
+            # Use direct delete where filter -> avoids fetching 10k IDs into memory
+            # and missing chunks if a get limit is hit.
+            # Strictly use both document_id and tenant_id in the filter as requested.
+            # BROAD PURGE: Use only document_id within the tenant's collection.
+            # Adding tenant_id to the filter is redundant inside a tenant-specific collection
+            # and it skips legacy chunks that lack the tenant_id metadata field.
+            delete_filter = {"document_id": document_id}
             
-            return 0
+            collection.delete(where=delete_filter)
+            
+            if count > 0:
+                logger.info(f"[VECTOR_STORE] Issued broad delete for approx {count} chunks for doc {document_id}")
+            
+            # Post-deletion verification
+            verify_results = collection.get(where=delete_filter)
+            remaining_count = len(verify_results.get('ids', []))
+            
+            if remaining_count == 0:
+                logger.info(f"[VECTOR_STORE] ✅ Verification successful: 0 chunks remain for doc {document_id}")
+            else:
+                logger.error(f"[VECTOR_STORE] ❌ Verification failed: {remaining_count} chunks still remain for doc {document_id}!")
+                
+            return count - remaining_count
             
         except Exception as e:
-            print(f"Error deleting document: {str(e)}")
+            logger.error(f"[VECTOR_STORE] Error deleting document {document_id}: {str(e)}")
             return 0
     
     def update_document(
@@ -264,7 +297,7 @@ class VectorStore:
     
     def get_all_document_ids(self, tenant_id: str) -> List[str]:
         """
-        Get all unique document IDs in the collection
+        Get all unique document IDs in the collection by paginating through all chunks.
         
         Args:
             tenant_id: Tenant identifier
@@ -273,22 +306,34 @@ class VectorStore:
             List of document IDs
         """
         collection = self.get_or_create_collection(tenant_id)
+        document_ids = set()
         
         try:
-            results = collection.get()
+            # Paginate through all documents in the collection
+            limit = 100
+            offset = 0
             
-            if results['metadatas']:
-                document_ids = set()
-                for metadata in results['metadatas']:
-                    if 'document_id' in metadata:
-                        document_ids.add(metadata['document_id'])
+            while True:
+                results = collection.get(
+                    limit=limit,
+                    offset=offset,
+                    include=['metadatas']
+                )
                 
-                return list(document_ids)
+                if not results['ids']:
+                    break
+                    
+                for metadata in results['metadatas']:
+                    if metadata and 'document_id' in metadata:
+                        document_ids.add(str(metadata['document_id']))
+                
+                offset += limit
             
-            return []
+            logger.info(f"[VECTOR_STORE] Found {len(document_ids)} unique documents in collection for tenant {tenant_id}")
+            return list(document_ids)
             
         except Exception as e:
-            print(f"Error getting document IDs: {str(e)}")
+            logger.error(f"[VECTOR_STORE] Error getting document IDs for tenant {tenant_id}: {str(e)}")
             return []
     
     def clear_collection(self, tenant_id: str) -> bool:

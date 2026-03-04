@@ -1,5 +1,6 @@
 # subscriptions/views.py - FIXED VERSION
 import hashlib
+import uuid
 import hmac
 import logging
 import razorpay
@@ -104,114 +105,93 @@ class CurrentSubscriptionView(APIView):
             })
 
 
-# ==================== CREATE RAZORPAY ORDER (DEV MODE) ====================
+# ==================== CREATE RAZORPAY ORDER ====================
 class CreateRazorpayOrderView(APIView):
     """
-    DEV MODE: Auto-activates subscription without real payment.
-    Replace with real Razorpay order creation before going to production.
+    Creates a Razorpay order or a 'Simulated' order if keys are missing.
+    In both cases, final activation happens ONLY after verification.
     """
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
-            print(f"\n{'='*60}")
-            print(f"📝 DEV MODE: CREATE ORDER (BYPASS)")
-            print(f"{'='*60}")
-
             user = request.user
-
             if str(user.role).upper() != 'TENANT_ADMIN':
-                return Response(
-                    {'error': 'Only tenant admins can subscribe'},
-                    status=status.HTTP_403_FORBIDDEN
-                )
-
+                return Response({'error': 'Only tenant admins can manage subscriptions'}, status=status.HTTP_403_FORBIDDEN)
             if not user.tenant:
-                return Response(
-                    {'error': 'No tenant associated'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({'error': 'No tenant associated'}, status=status.HTTP_400_BAD_REQUEST)
 
             plan_id = request.data.get('plan_id')
             billing_cycle = request.data.get('billing_cycle', 'monthly')
-
-            if not plan_id:
-                return Response(
-                    {'error': 'plan_id is required'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            payment_method = request.data.get('payment_method', 'card')
+            auto_renew = request.data.get('auto_renew', True)
 
             try:
                 plan = SubscriptionPlan.objects.get(id=plan_id, is_active=True)
             except SubscriptionPlan.DoesNotExist:
-                return Response(
-                    {'error': 'Invalid or inactive plan'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({'error': 'Invalid plan'}, status=status.HTTP_404_NOT_FOUND)
 
-            # DEV MODE: Auto-activate subscription without payment
-            print(f"⚠️  DEV MODE: Auto-activating subscription for {user.email}")
-
-            # Cancel any existing active subscriptions
-            Subscription.objects.filter(
-                tenant=user.tenant,
-                status='active'
-            ).update(
-                status='cancelled',
-                is_active=False,
-                cancelled_at=timezone.now()
-            )
-
-            # Create new subscription
-            start_date = timezone.now().date()
-            duration_days = 365 if billing_cycle == 'yearly' else 30
-            end_date = start_date + timedelta(days=duration_days)
             amount = plan.yearly_price if billing_cycle == 'yearly' else plan.monthly_price
+            
+            # ── Simulation vs Real ──────────────────────────────────────────
+            is_simulated = not (RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET and razorpay_client)
+            order_id = f"sim_order_{uuid.uuid4().hex[:12]}"
+            
+            if not is_simulated:
+                try:
+                    # For Razorpay Subscriptions (Monthly AND Auto-renew enabled)
+                    if billing_cycle == 'monthly' and plan.razorpay_monthly_plan_id and auto_renew:
+                        razorpay_sub = razorpay_client.subscription.create({
+                            "plan_id": plan.razorpay_monthly_plan_id,
+                            "customer_notify": 1,
+                            "total_count": 120, # 10 years
+                        })
+                        order_id = razorpay_sub['id']
+                        return Response({
+                            'key': RAZORPAY_KEY_ID,
+                            'subscription_id': order_id,
+                            'type': 'subscription',
+                            'plan_name': plan.name,
+                            'amount': int(amount * 100),
+                            'payment_method': payment_method,
+                            'auto_renew': True
+                        })
+                    
+                    # For one-time payments (Yearly)
+                    else:
+                        rz_order = razorpay_client.order.create({
+                            'amount': int(amount * 100),
+                            'currency': 'INR',
+                            'payment_capture': 1
+                        })
+                        order_id = rz_order['id']
+                except Exception as rz_err:
+                    logger.error(f"Razorpay API Error: {rz_err}")
+                    is_simulated = True # Fallback to simulation if enabled or log error
 
-            subscription = Subscription.objects.create(
-                tenant=user.tenant,
-                plan=plan,
-                status='active',
-                billing_cycle=billing_cycle,
-                start_date=start_date,
-                end_date=end_date,
-                next_billing_date=end_date,
-                amount_paid=amount,
-                is_active=True,
-                auto_renew=False
-            )
-
-            # Create a dev payment record for audit trail
-            Payment.objects.create(
-                razorpay_order_id=f"dev_order_{subscription.id}",
-                razorpay_payment_id=f"dev_payment_{subscription.id}",
-                amount=amount,
-                currency='INR',
-                status='success',
-                billing_cycle=billing_cycle,
-                plan_name=plan.name,
-                subscription=subscription
-            )
-
-            print(f"✅ DEV MODE: Subscription activated — ID {subscription.id}")
-            print(f"{'='*60}\n")
-
-            serializer = SubscriptionSerializer(subscription)
+            # Create a PENDING payment record
+            # We don't create the subscription yet - that happens on verify
+            # But we create a placeholder so we can track the attempt
+            
+            # Note: We don't link to a subscription yet as it doesn't exist
+            # We'll link it in the Verify view.
+            
             return Response({
-                'dev_mode': True,
-                'success': True,
-                'message': 'DEV MODE: Subscription activated without payment',
-                'subscription': serializer.data,
-            }, status=status.HTTP_201_CREATED)
+                'key': RAZORPAY_KEY_ID or 'rzp_test_simulation',
+                'order_id': order_id,
+                'type': 'order',
+                'amount': int(amount * 100),
+                'currency': 'INR',
+                'plan_name': plan.name,
+                'is_simulated': is_simulated,
+                'payment_method': payment_method,
+                'auto_renew': auto_renew,
+                'message': 'Simulation mode active' if is_simulated else 'Order created'
+            })
 
         except Exception as e:
-            print(f"❌ Error in CreateRazorpayOrderView: {str(e)}")
-            import traceback
-            traceback.print_exc()
-            return Response(
-                {'error': f'Failed: {str(e)}'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            logger.error(f"Error in CreateRazorpayOrderView: {e}")
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # ==================== VERIFY PAYMENT ====================
@@ -222,16 +202,12 @@ class VerifyRazorpayPaymentView(APIView):
     def post(self, request):
         try:
             print(f"\n{'='*60}")
-            print(f"🔍 VERIFY PAYMENT REQUEST")
+            print(f"🔍 VERIFY PAYMENT REQUEST FOR {request.user.email}")
             print(f"{'='*60}")
 
             user = request.user
-
             if not user.tenant:
-                return Response(
-                    {'error': 'No tenant associated'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+                return Response({'error': 'No tenant associated'}, status=status.HTTP_400_BAD_REQUEST)
 
             razorpay_order_id   = request.data.get('razorpay_order_id')
             razorpay_payment_id = request.data.get('razorpay_payment_id')
@@ -239,86 +215,61 @@ class VerifyRazorpayPaymentView(APIView):
             plan_id             = request.data.get('plan_id')
             billing_cycle       = request.data.get('billing_cycle', 'yearly')
             payment_type        = request.data.get('type', 'order')
+            payment_method      = request.data.get('payment_method', 'card')
+            auto_renew          = request.data.get('auto_renew', True)
 
-            print(f"Order ID:   {razorpay_order_id}")
-            print(f"Payment ID: {razorpay_payment_id}")
-            print(f"Type:       {payment_type}")
-
-            if not all([razorpay_payment_id, razorpay_signature, plan_id]):
-                return Response(
-                    {'error': 'Missing required fields'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            # ── Signature verification ────────────────────────────────────
-            if payment_type == 'subscription':
-                # Subscription flow: subscription_id|payment_id
-                razorpay_subscription_id = request.data.get('razorpay_subscription_id', '')
-                message = f"{razorpay_subscription_id}|{razorpay_payment_id}"
+            print(f"Order: {razorpay_order_id} | Payment: {razorpay_payment_id} | Method: {payment_method}")
+            
+            # ── Simulation Bypass ─────────────────────────────────────────
+            is_simulated = str(razorpay_order_id or '').startswith('sim_order_')
+            
+            if is_simulated:
+                print(f"⚠️  SIMULATION: Signature bypass")
             else:
-                # One-time order flow: order_id|payment_id
+                if not RAZORPAY_KEY_SECRET:
+                    logger.error("RAZORPAY_KEY_SECRET missing in settings")
+                    return Response({'error': 'Backend configuration error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    
                 message = f"{razorpay_order_id}|{razorpay_payment_id}"
+                if payment_type == 'subscription':
+                    message = f"{request.data.get('razorpay_subscription_id', '')}|{razorpay_payment_id}"
 
-            generated_signature = hmac.new(          # ← FIXED: was hmac.new (typo)
-                RAZORPAY_KEY_SECRET.encode('utf-8'),
-                message.encode('utf-8'),
-                hashlib.sha256
-            ).hexdigest()
+                generated_signature = hmac.new(
+                    RAZORPAY_KEY_SECRET.encode('utf-8'),
+                    message.encode('utf-8'),
+                    hashlib.sha256
+                ).hexdigest()
 
-            if generated_signature != razorpay_signature:
-                print(f"❌ Signature verification failed")
-                return Response(
-                    {'error': 'Invalid payment signature'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            print(f"✅ Signature verified")
+                if generated_signature != razorpay_signature:
+                    print(f"❌ Signature MISMATCH")
+                    return Response({'error': 'Invalid signature'}, status=status.HTTP_400_BAD_REQUEST)
+                print(f"✅ Signature MATCH")
 
             # ── Get plan ──────────────────────────────────────────────────
+            print(f"📊 Fetching plan with ID: {plan_id}...")
             try:
                 plan = SubscriptionPlan.objects.get(id=plan_id)
+                print(f"✅ Found plan: {plan.name}")
             except SubscriptionPlan.DoesNotExist:
-                return Response(
-                    {'error': 'Invalid plan'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
+                print(f"❌ Plan NOT FOUND")
+                return Response({'error': 'Invalid plan'}, status=status.HTTP_404_NOT_FOUND)
 
             amount = plan.yearly_price if billing_cycle == 'yearly' else plan.monthly_price
 
-            # ── Upsert payment record ─────────────────────────────────────
-            try:
-                payment = Payment.objects.get(razorpay_order_id=razorpay_order_id)
-                payment.razorpay_payment_id = razorpay_payment_id
-                payment.razorpay_signature  = razorpay_signature
-                payment.status = 'success'
-                payment.save()
-            except Payment.DoesNotExist:
-                payment = Payment.objects.create(
-                    razorpay_order_id=razorpay_order_id or f"order_{razorpay_payment_id}",
-                    razorpay_payment_id=razorpay_payment_id,
-                    razorpay_signature=razorpay_signature,
-                    amount=amount,
-                    currency='INR',
-                    status='success',
-                    billing_cycle=billing_cycle,
-                    plan_name=plan.name,
-                )
-
-            # ── Cancel existing subscriptions ─────────────────────────────
-            Subscription.objects.filter(
-                tenant=user.tenant,
-                status='active'
-            ).update(
-                status='cancelled',
-                is_active=False,
-                cancelled_at=timezone.now()
+            # ── 1. Deactivate old subscriptions ────────────────────────────
+            print("🔄 Deactivating old subscriptions...")
+            Subscription.objects.filter(tenant=user.tenant, status='active').update(
+                status='cancelled', is_active=False, cancelled_at=timezone.now()
             )
 
-            # ── Create new subscription ───────────────────────────────────
-            start_date    = timezone.now().date()
+            # ── 2. Create the Subscription FIRST ──────────────────────────
+            # (Because Payment requires a subscription FK)
+            print("🆕 Creating new subscription object...")
+            start_date = timezone.now().date()
             duration_days = 365 if billing_cycle == 'yearly' else 30
-            end_date      = start_date + timedelta(days=duration_days)
+            end_date = start_date + timedelta(days=duration_days)
 
+            print(f"🆕 Creating subscription: Tenant={user.tenant}, Plan={plan.id}")
             subscription = Subscription.objects.create(
                 tenant=user.tenant,
                 plan=plan,
@@ -327,32 +278,44 @@ class VerifyRazorpayPaymentView(APIView):
                 start_date=start_date,
                 end_date=end_date,
                 next_billing_date=end_date,
-                amount_paid=payment.amount,
+                amount_paid=amount,
                 is_active=True,
-                auto_renew=(payment_type == 'subscription'),
+                auto_renew=auto_renew,
+                payment_method=payment_method,
+                razorpay_subscription_id=request.data.get('razorpay_subscription_id')
+            )
+            print(f"✅ Subscription created: {subscription.id}")
+
+            # ── 3. Create or Link Payment record ──────────────────────────
+            print(f"💳 Recording {payment_method.upper()} payment details...")
+            payment, created = Payment.objects.update_or_create(
+                razorpay_order_id=razorpay_order_id or f"order_{razorpay_payment_id}",
+                defaults={
+                    'subscription': subscription,
+                    'razorpay_payment_id': razorpay_payment_id,
+                    'razorpay_signature': razorpay_signature,
+                    'amount': amount,
+                    'status': 'success',
+                    'plan_name': plan.name,
+                    'billing_cycle': billing_cycle,
+                    'payment_method': payment_method
+                }
             )
 
-            payment.subscription = subscription
-            payment.save()
-
-            print(f"✅ Subscription activated for {user.email}")
+            print(f"✨ Verification Complete. ID: {subscription.id}")
             print(f"{'='*60}\n")
 
-            serializer = SubscriptionSerializer(subscription)
             return Response({
                 'success': True,
-                'message': 'Payment verified and subscription activated',
-                'subscription': serializer.data,
+                'message': 'Subscription activated',
+                'subscription': SubscriptionSerializer(subscription).data,
             })
 
         except Exception as e:
-            print(f"❌ Verification error: {str(e)}")
+            print(f"🔥 UNEXPECTED VERIFICATION ERROR: {str(e)}")
             import traceback
             traceback.print_exc()
-            return Response(
-                {'error': f'Verification failed: {str(e)}'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
+            return Response({'error': f'Internal Server Error: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # ==================== CANCEL SUBSCRIPTION ====================

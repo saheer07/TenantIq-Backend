@@ -137,7 +137,22 @@ def index_document_task(self, document_id: str, tenant_id: str, file_path: str =
         if not os.path.exists(file_path):
             logger.error(f"[TASK] File not found at path: {file_path}")
             raise FileNotFoundError(f"File not found: {file_path}")
-        
+
+        # ── RACE CONDITION CHECK ─────────────────────────────────────────────
+        # Check if document was deleted from doc_service while task was queued.
+        # Since we are in the same DB (Postgres), we can check directly.
+        try:
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM doc_service_document WHERE id = %s::uuid", [str(document_id)])
+                if not cursor.fetchone():
+                    logger.warning(f"[TASK] ABORTING: Document {document_id} no longer exists in source database.")
+                    # Clean up the local record we might have just created/updated
+                    DocumentIndex.objects.filter(id=document_id).delete()
+                    return {'success': False, 'error': 'Document deleted before indexing started'}
+        except Exception as e:
+            logger.warning(f"[TASK] Source check failed (non-fatal): {e}")
+
         logger.info(f"[TASK] 📁 Processing file: {file_path}")
         
         # Initialize processors
@@ -181,6 +196,19 @@ def index_document_task(self, document_id: str, tenant_id: str, file_path: str =
         from .views import sanitize_metadata_for_chromadb
         chunk_metadatas = [sanitize_metadata_for_chromadb(chunk.metadata) for chunk in chunks]
         
+        # ── FINAL DELETION CHECK ─────────────────────────────────────────────
+        # Last-second check to avoid writing to vector store if document was deleted
+        try:
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT id FROM doc_service_document WHERE id = %s::uuid", [str(document_id)])
+                if not cursor.fetchone():
+                    logger.warning(f"[TASK] ABORTING (Pre-Write): Document {document_id} was deleted during embedding generation.")
+                    DocumentIndex.objects.filter(id=document_id).delete()
+                    return {'success': False, 'error': 'Document deleted during processing'}
+        except Exception as e:
+            pass # Continue if check fails
+
         # Add to vector store
         logger.info(f"[TASK] Adding embeddings to vector store (ChromaDB)...")
         vector_store.add_documents(
@@ -408,3 +436,140 @@ def update_usage_stats_task(tenant_id: str):
             'success': False,
             'error': error_msg
         }
+
+
+
+@shared_task(bind=True, max_retries=5)
+def delete_document_task(self, document_id: str, tenant_id: str):
+    """
+    Robust asynchronous task to delete a document and its embeddings.
+    Strictly enforces tenant isolation and retries on failure.
+    """
+    try:
+        tenant_id = str(tenant_id).strip().lower()
+        logger.info(f"[TASK] Starting robust deletion for document {document_id} (Tenant: {tenant_id})")
+
+        # 1. Delete from Vector Store (ChromaDB)
+        store = VectorStore()
+        num_deleted = store.delete_document(tenant_id, document_id)
+        logger.info(f"[TASK] Purged {num_deleted} chunks from vector store for document {document_id}")
+
+        # 2. Delete local relational records
+        from django.db import transaction
+        with transaction.atomic():
+            from .models import MessageSource
+            sources_deleted, _ = MessageSource.objects.filter(document_id=document_id).delete()
+            if sources_deleted:
+                logger.info(f"[TASK] Cleaned up {sources_deleted} message source references")
+
+            docs_deleted, _ = DocumentIndex.objects.filter(id=document_id).delete()
+            if docs_deleted:
+                logger.info(f"[TASK] Successfully deleted DocumentIndex record for {document_id}")
+            else:
+                logger.warning(f"[TASK] No local DocumentIndex record found for {document_id}")
+
+        # 3. Clear relevant cache entries
+        try:
+            cache_keys_to_delete = [
+                f"doc_status_{document_id}",
+                f"doc_index_{document_id}",
+            ]
+            cache.delete_many(cache_keys_to_delete)
+            logger.info(f"[TASK] Cleared specific cache keys for {document_id}")
+        except Exception as cache_e:
+            logger.warning(f"[TASK] Failed to clear cache for {document_id}: {cache_e}")
+
+        logger.info(f"[TASK] Robust deletion complete for {document_id}")
+        return {'success': True, 'document_id': document_id, 'chunks_deleted': num_deleted}
+
+    except Exception as e:
+        logger.error(f"❌ [TASK] Deletion failed for {document_id}: {e}", exc_info=True)
+        if self.request.retries < self.max_retries:
+            countdown = 2 ** self.request.retries * 60  # 1m, 2m, 4m, 8m, 16m
+            logger.info(f"[TASK] Retrying in {countdown}s...")
+            raise self.retry(exc=e, countdown=countdown)
+        return {'success': False, 'error': str(e)}
+
+
+@shared_task
+def reconcile_vector_store_task():
+    """
+    Ultimate Deletion Safeguard: Periodically audits all embeddings across all tenants.
+    Compares local document IDs against the 'Source of Truth' in Project Three.
+    Purges any documents that are NOT present in the master list.
+    """
+    import requests
+    from django.conf import settings
+    
+    logger.info("[RECONCILE] Starting cross-service reconciliation audit...")
+    
+    # 1. Fetch Master List from Project Three
+    try:
+        master_url = f"{settings.DOCUMENT_SERVICE_URL}/api/doc/internal/active-document-ids/"
+        api_key = getattr(settings, 'DOCUMENT_SERVICE_WEBHOOK_API_KEY', settings.WEBHOOK_API_KEY)
+        
+        response = requests.get(
+            master_url,
+            headers={'X-API-Key': api_key},
+            timeout=30
+        )
+        
+        if response.status_code != 200:
+            logger.error(f"[RECONCILE] Failed to fetch master list. Status: {response.status_code}")
+            return {'success': False, 'error': 'Failed to reach source of truth'}
+            
+        data = response.json()
+        # Create a lookup set of (tenant_id, document_id)
+        # Standardise IDs to strings for comparison
+        active_docs = {
+            (str(doc['tenant_id']).strip().lower(), str(doc['id']).strip().lower())
+            for doc in data.get('documents', [])
+        }
+        logger.info(f"[RECONCILE] Fetched {len(active_docs)} active documents from source of truth.")
+        
+    except Exception as e:
+        logger.error(f"[RECONCILE] Source of truth connection error: {e}")
+        return {'success': False, 'error': str(e)}
+
+    # 2. Audit all collections in Vector Store
+    try:
+        store = VectorStore()
+        # For simple ChromaDB, we might need to list collections or iterate through known tenants.
+        # Here we'll iterate through all collections in the client.
+        collections = store.client.list_collections()
+        
+        total_purged = 0
+        
+        for collection in collections:
+            # Collection names are "tenant_<tenant_id>"
+            if not collection.name.startswith("tenant_"):
+                continue
+                
+            tenant_id = collection.name.replace("tenant_", "")
+            logger.info(f"[RECONCILE] Auditing collection for tenant: {tenant_id}")
+            
+            # Get all document IDs currently in this collection
+            local_doc_ids = store.get_all_document_ids(tenant_id)
+            
+            for doc_id in local_doc_ids:
+                doc_id_clean = str(doc_id).strip().lower()
+                
+                # Check if this document exists in the active master list
+                if (tenant_id, doc_id_clean) not in active_docs:
+                    logger.warning(f"[RECONCILE] Found ORPHANED document {doc_id} for tenant {tenant_id}. PURGING!")
+                    
+                    # TRIGGER PURGE
+                    store.delete_document(tenant_id, doc_id)
+                    
+                    # Also clean up local relational DB if it somehow exists
+                    # (Usually it wouldn't if it's orphaned, but safety first)
+                    DocumentIndex.objects.filter(id=doc_id, tenant_id=tenant_id).delete()
+                    
+                    total_purged += 1
+        
+        logger.info(f"[RECONCILE] Audit complete. Total orphaned documents purged: {total_purged}")
+        return {'success': True, 'purged_count': total_purged}
+        
+    except Exception as e:
+        logger.error(f"[RECONCILE] Audit execution error: {e}", exc_info=True)
+        return {'success': False, 'error': str(e)}

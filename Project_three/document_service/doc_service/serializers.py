@@ -158,6 +158,13 @@ class DocumentSerializer(serializers.ModelSerializer):
         return data
 
 
+class ActiveDocumentIDSerializer(serializers.ModelSerializer):
+    """Serializer for Internal Reconciliation Audit"""
+    class Meta:
+        model = Document
+        fields = ['id', 'tenant_id']
+
+
 class DocumentListSerializer(serializers.ModelSerializer):
     """
     Lightweight serializer for document lists.

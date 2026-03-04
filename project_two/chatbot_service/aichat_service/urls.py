@@ -15,7 +15,6 @@ from .views import (
     RAGStatsView,
     UsageStatsView,
     HealthCheckView,
-    TriggerDocumentIndexView,
 )
 
 # ==================== ROUTER ====================
@@ -48,7 +47,6 @@ urlpatterns = [
     path('query/', ChatQueryView.as_view(), name='chat-query'),
     path('stats/', RAGStatsView.as_view(), name='rag-stats'),
     path('usage-stats/', UsageStatsView.as_view(), name='usage-stats'),
-    path('documents/index/', TriggerDocumentIndexView.as_view(), name='trigger-index'),
 
     # ==================== VIEWSET ROUTES ====================
     # Router urls come LAST so they don't shadow the custom paths above.

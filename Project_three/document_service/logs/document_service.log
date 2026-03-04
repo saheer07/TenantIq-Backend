@@ -16598,3 +16598,858 @@ django.http.response.Http404: No Document matches the given query.
 [INFO] 2026-02-28 16:44:04,724 log - "GET /media/documents/2026/02/28/Saheer_Resume.pdf HTTP/1.1" 200 58130
 [INFO] 2026-02-28 16:50:29,465 log - "GET /media/documents/2026/02/28/Saheer_Resume.pdf HTTP/1.1" 304 0
 [INFO] 2026-03-01 11:36:14,823 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-02 12:01:59,744 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-02 12:02:45,230 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-02 12:02:45,235 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-02 12:02:45,265 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 12:02:45,785 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 12:02:45,805 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 12:02:45,814 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 12:02:45,873 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 12:02:45,882 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 12:02:45,900 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 12:02:45,910 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 12:52:35,854 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 12:52:38,125 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 12:52:38,543 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 12:52:38,571 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 13:02:21,016 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:02:21,853 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 13:02:22,006 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:02:22,110 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 13:02:28,429 log - "OPTIONS /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/ HTTP/1.1" 200 0
+[INFO] 2026-03-02 13:02:28,497 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[INFO] 2026-03-02 13:02:28,892 views - DELETE request for document eb262425-5106-4185-961d-f48ca158234c
+[INFO] 2026-03-02 13:02:29,861 views - Deleted 1 access logs for document eb262425-5106-4185-961d-f48ca158234c
+[INFO] 2026-03-02 13:02:29,953 views - Deleted 0 chunks for document eb262425-5106-4185-961d-f48ca158234c
+[INFO] 2026-03-02 13:02:30,003 views - File deleted: Saheer_Resume.pdf
+[INFO] 2026-03-02 13:02:38,389 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:02:46,483 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=58fa7a63-2f1a-446b-a888-777d56a9a809 -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-02 13:02:46,954 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 13:02:46,991 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:02:47,324 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 13:02:52,204 webhook_sender - [WEBHOOK] Response attempt=1 status=200 body={"status":"success","document_id":"eb262425-5106-4185-961d-f48ca158234c","message":"Document removal synced"}
+[INFO] 2026-03-02 13:02:52,344 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-02 13:02:52,470 views - Document eb262425-5106-4185-961d-f48ca158234c deleted successfully
+[INFO] 2026-03-02 13:02:52,502 basehttp - - Broken pipe from ('127.0.0.1', 54379)
+[INFO] 2026-03-02 13:03:35,374 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[INFO] 2026-03-02 13:03:35,376 views - DELETE request for document eb262425-5106-4185-961d-f48ca158234c
+[ERROR] 2026-03-02 13:03:35,917 views - DELETE ERROR for document eb262425-5106-4185-961d-f48ca158234c: No Document matches the given query.
+Traceback (most recent call last):
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\shortcuts.py", line 90, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\db\models\query.py", line 639, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+doc_service.models.Document.DoesNotExist: Document matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py", line 352, in delete
+    document = self.get_object(pk, request.tenant_id, request.user.id)
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py", line 306, in get_object
+    document = get_object_or_404(Document, pk=pk, tenant_id=tenant_id)
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\shortcuts.py", line 92, in get_object_or_404
+    raise Http404(
+        "No %s matches the given query." % queryset.model._meta.object_name
+    )
+django.http.response.Http404: No Document matches the given query.
+
+[ERROR] 2026-03-02 13:03:35,931 log - Internal Server Error: /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[ERROR] 2026-03-02 13:03:35,934 log - "DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/ HTTP/1.1" 500 75
+[INFO] 2026-03-02 13:04:15,021 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[INFO] 2026-03-02 13:04:15,048 views - DELETE request for document eb262425-5106-4185-961d-f48ca158234c
+[ERROR] 2026-03-02 13:04:15,060 views - DELETE ERROR for document eb262425-5106-4185-961d-f48ca158234c: No Document matches the given query.
+Traceback (most recent call last):
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\shortcuts.py", line 90, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\db\models\query.py", line 639, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+doc_service.models.Document.DoesNotExist: Document matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py", line 352, in delete
+    document = self.get_object(pk, request.tenant_id, request.user.id)
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py", line 306, in get_object
+    document = get_object_or_404(Document, pk=pk, tenant_id=tenant_id)
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\shortcuts.py", line 92, in get_object_or_404
+    raise Http404(
+        "No %s matches the given query." % queryset.model._meta.object_name
+    )
+django.http.response.Http404: No Document matches the given query.
+
+[ERROR] 2026-03-02 13:04:15,084 log - Internal Server Error: /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[ERROR] 2026-03-02 13:04:15,086 log - "DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/ HTTP/1.1" 500 75
+[INFO] 2026-03-02 13:04:37,785 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[INFO] 2026-03-02 13:04:37,794 views - DELETE request for document eb262425-5106-4185-961d-f48ca158234c
+[ERROR] 2026-03-02 13:04:37,800 views - DELETE ERROR for document eb262425-5106-4185-961d-f48ca158234c: No Document matches the given query.
+Traceback (most recent call last):
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\shortcuts.py", line 90, in get_object_or_404
+    return queryset.get(*args, **kwargs)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\db\models\query.py", line 639, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+doc_service.models.Document.DoesNotExist: Document matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py", line 352, in delete
+    document = self.get_object(pk, request.tenant_id, request.user.id)
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py", line 306, in get_object
+    document = get_object_or_404(Document, pk=pk, tenant_id=tenant_id)
+  File "C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\venv\Lib\site-packages\django\shortcuts.py", line 92, in get_object_or_404
+    raise Http404(
+        "No %s matches the given query." % queryset.model._meta.object_name
+    )
+django.http.response.Http404: No Document matches the given query.
+
+[ERROR] 2026-03-02 13:04:37,805 log - Internal Server Error: /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[ERROR] 2026-03-02 13:04:37,806 log - "DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/ HTTP/1.1" 500 75
+[INFO] 2026-03-02 13:27:01,591 autoreload - C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py changed, reloading.
+[INFO] 2026-03-02 13:27:11,134 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-02 13:27:40,710 middleware - Tenant ID from X-Tenant-ID header: 4
+[INFO] 2026-03-02 13:27:40,711 middleware - [Tenant: 4] DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[WARNING] 2026-03-02 13:27:40,719 log - Unauthorized: /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/
+[WARNING] 2026-03-02 13:27:40,720 log - "DELETE /api/doc/documents/eb262425-5106-4185-961d-f48ca158234c/ HTTP/1.1" 401 58
+[INFO] 2026-03-02 13:29:58,601 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:29:58,778 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-02 13:29:58,789 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:29:58,793 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-02 13:30:17,095 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-02 13:30:17,096 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-02 13:30:17,099 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-02 13:30:18,050 views - [UPLOAD] Document saved to DB: 58a71c2d-45ee-4a06-bd8d-9e03ce95b477
+[INFO] 2026-03-02 13:30:19,001 views - [UPLOAD] Triggering chatbot indexing for document 58a71c2d-45ee-4a06-bd8d-9e03ce95b477...
+[INFO] 2026-03-02 13:30:19,522 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\02\Saheer_Resume.pdf
+[INFO] 2026-03-02 13:30:19,677 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-02 13:30:19,678 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=becc17c5-694f-4953-924d-1f86eed8e9dc -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[WARNING] 2026-03-02 13:30:49,697 webhook_sender - [WEBHOOK] Timeout attempt=1/3
+[INFO] 2026-03-02 13:30:49,698 webhook_sender - [WEBHOOK] Retrying in 1s (attempt 2/3)...
+[INFO] 2026-03-02 13:31:16,291 webhook_sender - [WEBHOOK] Response attempt=2 status=202 body={"message":"Indexing started (background thread)","document_id":"58a71c2d-45ee-4a06-bd8d-9e03ce95b477","status":"processing"}
+[INFO] 2026-03-02 13:31:16,295 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=2/3
+[INFO] 2026-03-02 13:31:16,301 webhook_sender - [WEBHOOK] Document 58a71c2d-45ee-4a06-bd8d-9e03ce95b477 -> status=processing
+[INFO] 2026-03-02 13:31:16,303 views - [UPLOAD] Document 58a71c2d-45ee-4a06-bd8d-9e03ce95b477 queued for indexing successfully
+[INFO] 2026-03-02 13:31:16,312 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-02 13:31:16,342 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:16,351 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:21,493 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:21,497 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:26,506 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:26,511 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:31,499 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:31,507 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:36,565 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:36,621 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:41,499 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:41,505 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:46,499 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:46,506 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:51,508 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:51,515 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-02 13:31:56,507 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:31:56,514 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-02 13:32:06,674 log - "GET /media/documents/2026/03/02/Saheer_Resume.pdf HTTP/1.1" 200 58130
+[INFO] 2026-03-02 13:32:15,279 log - "OPTIONS /api/doc/documents/58a71c2d-45ee-4a06-bd8d-9e03ce95b477/ HTTP/1.1" 200 0
+[INFO] 2026-03-02 13:32:15,283 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/58a71c2d-45ee-4a06-bd8d-9e03ce95b477/
+[INFO] 2026-03-02 13:32:15,286 views - DELETE request for document 58a71c2d-45ee-4a06-bd8d-9e03ce95b477
+[INFO] 2026-03-02 13:32:15,302 views - Deleted 1 access logs for document 58a71c2d-45ee-4a06-bd8d-9e03ce95b477
+[INFO] 2026-03-02 13:32:15,343 views - Deleted 0 chunks for document 58a71c2d-45ee-4a06-bd8d-9e03ce95b477
+[INFO] 2026-03-02 13:32:15,372 views - File deleted: Saheer_Resume.pdf
+[INFO] 2026-03-02 13:32:15,489 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=a787f47f-e7a3-422d-8cfb-2ef0f52f9f04 -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-02 13:32:16,121 webhook_sender - [WEBHOOK] Response attempt=1 status=200 body={"status":"success","document_id":"58a71c2d-45ee-4a06-bd8d-9e03ce95b477","message":"Document removal synced"}
+[INFO] 2026-03-02 13:32:16,148 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-02 13:32:16,193 views - Document 58a71c2d-45ee-4a06-bd8d-9e03ce95b477 deleted successfully
+[INFO] 2026-03-02 13:32:16,245 log - "DELETE /api/doc/documents/58a71c2d-45ee-4a06-bd8d-9e03ce95b477/ HTTP/1.1" 200 58
+[INFO] 2026-03-02 13:32:16,412 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:32:16,434 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[WARNING] 2026-03-02 13:32:18,253 log - Not Found: /favicon.ico
+[INFO] 2026-03-02 13:32:18,255 basehttp - - Broken pipe from ('127.0.0.1', 55826)
+[INFO] 2026-03-02 13:32:29,050 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-02 13:32:29,054 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-02 13:32:29,061 views - [UPLOAD] File: Enterprise Ai Saas Doc (1).docx (13817 bytes)
+[INFO] 2026-03-02 13:32:29,092 views - [UPLOAD] Document saved to DB: da51cb82-b113-4dc2-b151-31dc69730429
+[INFO] 2026-03-02 13:32:29,597 views - [UPLOAD] Triggering chatbot indexing for document da51cb82-b113-4dc2-b151-31dc69730429...
+[INFO] 2026-03-02 13:32:29,629 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\02\Enterprise_Ai_Saas_Doc_1.docx
+[INFO] 2026-03-02 13:32:29,629 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-02 13:32:29,633 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=83e2d879-b50d-4d95-bba1-f3b06a4825c1 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-02 13:32:29,843 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"da51cb82-b113-4dc2-b151-31dc69730429","status":"processing"}
+[INFO] 2026-03-02 13:32:29,846 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-02 13:32:29,852 webhook_sender - [WEBHOOK] Document da51cb82-b113-4dc2-b151-31dc69730429 -> status=processing
+[INFO] 2026-03-02 13:32:29,856 views - [UPLOAD] Document da51cb82-b113-4dc2-b151-31dc69730429 queued for indexing successfully
+[INFO] 2026-03-02 13:32:29,858 log - "POST /api/doc/documents/ HTTP/1.1" 201 677
+[INFO] 2026-03-02 13:32:29,890 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:32:29,899 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:32:35,060 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:32:35,067 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:32:40,044 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:32:40,049 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:32:45,043 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:32:45,048 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:32:50,047 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:32:50,053 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:32:55,050 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:32:55,057 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:00,053 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:00,058 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:05,044 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:05,051 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:10,042 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:10,047 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:15,216 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:15,224 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:20,043 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:20,047 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:25,082 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:25,086 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:30,048 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:30,053 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:35,051 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:35,056 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:40,049 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:40,056 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:45,045 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:45,053 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:50,046 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:50,054 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:33:55,047 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:33:55,054 log - "GET /api/doc/documents/ HTTP/1.1" 200 599
+[INFO] 2026-03-02 13:34:00,093 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 13:34:00,101 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-02 13:38:32,552 log - "GET /media/documents/2026/03/02/Enterprise_Ai_Saas_Doc_1.docx HTTP/1.1" 200 13817
+[INFO] 2026-03-02 23:31:16,041 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-02 23:31:16,051 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-02 23:31:18,552 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 23:31:29,815 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-02 23:31:30,126 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 23:31:30,349 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-02 23:39:38,316 autoreload - C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\webhook_sender.py changed, reloading.
+[INFO] 2026-03-02 23:42:55,198 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-02 23:45:44,604 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 23:45:45,141 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-02 23:45:45,161 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-02 23:45:45,179 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 10:25:09,697 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-03 10:30:06,964 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 10:30:06,966 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 10:30:07,064 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:30:07,175 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 10:30:07,179 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:30:07,188 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 10:30:26,283 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:30:26,289 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 10:30:26,293 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:30:26,300 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 10:39:42,432 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:39:42,605 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 10:39:42,787 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:39:42,806 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 10:39:48,910 log - "OPTIONS /api/doc/documents/da51cb82-b113-4dc2-b151-31dc69730429/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 10:39:48,944 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/da51cb82-b113-4dc2-b151-31dc69730429/
+[INFO] 2026-03-03 10:39:48,950 views - DELETE request for document da51cb82-b113-4dc2-b151-31dc69730429
+[INFO] 2026-03-03 10:39:48,977 views - Deleted 1 access logs for document da51cb82-b113-4dc2-b151-31dc69730429
+[INFO] 2026-03-03 10:39:48,997 views - Deleted 0 chunks for document da51cb82-b113-4dc2-b151-31dc69730429
+[INFO] 2026-03-03 10:39:49,015 views - File deleted: Enterprise Ai Saas Doc (1).docx
+[INFO] 2026-03-03 10:39:49,058 views - Document da51cb82-b113-4dc2-b151-31dc69730429 deleted from database successfully
+[INFO] 2026-03-03 10:39:49,755 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=824864a6-8b0b-4ae6-ad40-4a7adc8f2791 -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-03 10:39:51,544 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"status":"accepted","document_id":"da51cb82-b113-4dc2-b151-31dc69730429","message":"Document deletion queued"}
+[INFO] 2026-03-03 10:39:51,589 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-03 10:39:51,656 views - Triggered deletion webhook for da51cb82-b113-4dc2-b151-31dc69730429
+[INFO] 2026-03-03 10:39:51,692 log - "DELETE /api/doc/documents/da51cb82-b113-4dc2-b151-31dc69730429/ HTTP/1.1" 200 58
+[INFO] 2026-03-03 10:39:51,772 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:39:51,809 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 10:39:58,041 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:39:58,072 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 10:39:58,142 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 10:39:58,386 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 10:59:04,970 autoreload - C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py changed, reloading.
+[INFO] 2026-03-03 10:59:31,543 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-03 11:01:16,650 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:01:16,803 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:01:16,812 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:01:16,818 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:02:03,256 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:02:03,261 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:02:03,271 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:02:03,276 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:11:13,429 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:11:14,013 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:11:14,042 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:11:14,075 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:11:33,057 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:11:33,089 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:11:33,113 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:11:33,171 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:12:33,766 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:12:33,809 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:12:33,840 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:12:33,852 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:18:20,862 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:18:21,143 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:18:21,183 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:18:21,355 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:19:42,862 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-03 11:19:43,171 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-03 11:19:44,612 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-03 11:19:45,765 views - [UPLOAD] Document saved to DB: 9532bbfc-5cac-4ad9-a151-e1d8b66e1a38
+[INFO] 2026-03-03 11:19:46,307 views - [UPLOAD] Triggering chatbot indexing for document 9532bbfc-5cac-4ad9-a151-e1d8b66e1a38...
+[INFO] 2026-03-03 11:19:46,915 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\03\Saheer_Resume.pdf
+[INFO] 2026-03-03 11:19:46,915 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 11:19:46,916 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=97314966-5354-4564-956c-a0089a774e25 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 11:19:47,966 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"9532bbfc-5cac-4ad9-a151-e1d8b66e1a38","status":"processing"}
+[INFO] 2026-03-03 11:19:47,968 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-03 11:19:47,971 webhook_sender - [WEBHOOK] Document 9532bbfc-5cac-4ad9-a151-e1d8b66e1a38 -> status=processing
+[INFO] 2026-03-03 11:19:47,971 views - [UPLOAD] Document 9532bbfc-5cac-4ad9-a151-e1d8b66e1a38 queued for indexing successfully
+[INFO] 2026-03-03 11:19:47,989 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-03 11:19:47,999 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:19:48,006 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 11:19:53,110 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:19:53,123 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 11:19:58,130 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:19:58,151 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 11:25:25,361 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:25:25,623 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 11:25:25,769 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:25:25,829 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 11:29:09,981 autoreload - C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py changed, reloading.
+[INFO] 2026-03-03 11:29:13,227 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-03 11:30:23,571 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:30:23,725 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 11:30:23,764 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:30:23,788 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 11:44:20,668 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:44:26,593 basehttp - - Broken pipe from ('127.0.0.1', 54295)
+[INFO] 2026-03-03 11:44:27,185 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:44:27,447 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:44:27,450 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:44:27,474 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:49:57,715 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:49:58,646 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:49:58,734 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:49:58,890 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:51:05,831 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-03 11:51:06,842 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-03 11:51:09,470 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-03 11:51:20,332 views - [UPLOAD] Document saved to DB: 846ac58e-b8ab-4c71-a5b2-71b6979a16cd
+[INFO] 2026-03-03 11:51:21,217 views - [UPLOAD] Triggering chatbot indexing for document 846ac58e-b8ab-4c71-a5b2-71b6979a16cd...
+[INFO] 2026-03-03 11:51:30,857 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\03\Saheer_Resume.pdf
+[INFO] 2026-03-03 11:51:30,857 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 11:51:30,859 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=d3afd807-c9e0-43fd-b554-c2b9ec6c78b6 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 11:51:34,793 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"846ac58e-b8ab-4c71-a5b2-71b6979a16cd","status":"processing"}
+[INFO] 2026-03-03 11:51:34,795 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-03 11:51:35,113 webhook_sender - [WEBHOOK] Document 846ac58e-b8ab-4c71-a5b2-71b6979a16cd -> status=processing
+[INFO] 2026-03-03 11:51:35,164 views - [UPLOAD] Document 846ac58e-b8ab-4c71-a5b2-71b6979a16cd queued for indexing successfully
+[INFO] 2026-03-03 11:51:35,243 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-03 11:51:35,382 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:51:35,533 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 11:51:40,579 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:51:40,588 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 11:51:45,569 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:51:45,611 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 11:51:50,584 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:51:50,592 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 11:51:55,585 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:51:55,590 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 11:52:00,588 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:52:00,770 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 11:52:29,023 log - "OPTIONS /api/doc/documents/846ac58e-b8ab-4c71-a5b2-71b6979a16cd/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 11:52:29,027 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/846ac58e-b8ab-4c71-a5b2-71b6979a16cd/
+[INFO] 2026-03-03 11:52:29,458 views - DELETE request for document 846ac58e-b8ab-4c71-a5b2-71b6979a16cd
+[INFO] 2026-03-03 11:52:30,521 views - Physical file deleted: Saheer_Resume.pdf
+[INFO] 2026-03-03 11:52:31,097 views - Deleted 1 access logs for document 846ac58e-b8ab-4c71-a5b2-71b6979a16cd
+[INFO] 2026-03-03 11:52:31,516 views - Deleted 0 chunks for document 846ac58e-b8ab-4c71-a5b2-71b6979a16cd
+[INFO] 2026-03-03 11:52:31,648 views - Document 846ac58e-b8ab-4c71-a5b2-71b6979a16cd deleted from database successfully
+[INFO] 2026-03-03 11:52:31,780 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=c37c92ae-2612-4802-98ea-9430ad4f0d6f -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-03 11:52:33,204 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"status":"accepted","document_id":"846ac58e-b8ab-4c71-a5b2-71b6979a16cd","message":"Document deletion queued"}
+[INFO] 2026-03-03 11:52:33,205 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-03 11:52:33,209 views - Triggered deletion webhook for 846ac58e-b8ab-4c71-a5b2-71b6979a16cd
+[INFO] 2026-03-03 11:52:33,211 log - "DELETE /api/doc/documents/846ac58e-b8ab-4c71-a5b2-71b6979a16cd/ HTTP/1.1" 200 58
+[INFO] 2026-03-03 11:52:33,220 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:52:33,225 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:52:40,205 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:52:43,688 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 11:52:43,691 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 11:52:43,695 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:07:41,405 autoreload - C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py changed, reloading.
+[INFO] 2026-03-03 12:09:18,060 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-03 12:12:36,786 autoreload - C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\views.py changed, reloading.
+[INFO] 2026-03-03 12:12:40,288 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-03 12:15:46,197 log - "GET /api/doc/internal/active-document-ids/ HTTP/1.1" 200 26
+[INFO] 2026-03-03 12:25:27,301 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:25:28,607 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:25:28,640 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:25:28,646 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:28:38,519 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-03 12:28:38,686 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-03 12:28:39,592 views - [UPLOAD] File: Enterprise_Ai_Saas_Doc_1.docx (13817 bytes)
+[INFO] 2026-03-03 12:28:40,992 views - [UPLOAD] Document saved to DB: ffeb197e-e576-4566-b82a-fe3b57ad8981
+[INFO] 2026-03-03 12:28:41,637 views - [UPLOAD] Triggering chatbot indexing for document ffeb197e-e576-4566-b82a-fe3b57ad8981...
+[INFO] 2026-03-03 12:28:43,353 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\03\Enterprise_Ai_Saas_Doc_1.docx
+[INFO] 2026-03-03 12:28:43,354 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 12:28:43,378 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=92c8b548-41d4-4f18-adb1-1cb47410592f -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 12:28:45,004 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"ffeb197e-e576-4566-b82a-fe3b57ad8981","status":"processing"}
+[INFO] 2026-03-03 12:28:45,019 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-03 12:28:45,112 webhook_sender - [WEBHOOK] Document ffeb197e-e576-4566-b82a-fe3b57ad8981 -> status=processing
+[INFO] 2026-03-03 12:28:45,121 views - [UPLOAD] Document ffeb197e-e576-4566-b82a-fe3b57ad8981 queued for indexing successfully
+[INFO] 2026-03-03 12:28:45,803 log - "POST /api/doc/documents/ HTTP/1.1" 201 673
+[INFO] 2026-03-03 12:28:45,838 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:28:45,853 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 12:28:50,945 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:28:50,957 log - "GET /api/doc/documents/ HTTP/1.1" 200 595
+[INFO] 2026-03-03 12:28:55,925 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:28:55,932 log - "GET /api/doc/documents/ HTTP/1.1" 200 591
+[INFO] 2026-03-03 12:31:36,719 log - "OPTIONS /api/doc/documents/ffeb197e-e576-4566-b82a-fe3b57ad8981/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 12:31:36,733 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/ffeb197e-e576-4566-b82a-fe3b57ad8981/
+[INFO] 2026-03-03 12:31:36,801 views - DELETE request for document ffeb197e-e576-4566-b82a-fe3b57ad8981
+[INFO] 2026-03-03 12:31:37,031 views - Physical file deleted: Enterprise_Ai_Saas_Doc_1.docx
+[INFO] 2026-03-03 12:31:37,086 views - Deleted 1 access logs for document ffeb197e-e576-4566-b82a-fe3b57ad8981
+[INFO] 2026-03-03 12:31:37,138 views - Deleted 0 chunks for document ffeb197e-e576-4566-b82a-fe3b57ad8981
+[INFO] 2026-03-03 12:31:37,327 views - Document ffeb197e-e576-4566-b82a-fe3b57ad8981 deleted from database successfully
+[INFO] 2026-03-03 12:31:37,367 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=0e9cece3-5bde-4dec-a352-820c2073ecbc -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-03 12:31:38,553 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"status":"accepted","document_id":"ffeb197e-e576-4566-b82a-fe3b57ad8981","message":"Document deletion queued"}
+[INFO] 2026-03-03 12:31:38,584 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-03 12:31:38,595 views - Triggered deletion webhook for ffeb197e-e576-4566-b82a-fe3b57ad8981
+[INFO] 2026-03-03 12:31:38,605 log - "DELETE /api/doc/documents/ffeb197e-e576-4566-b82a-fe3b57ad8981/ HTTP/1.1" 200 58
+[INFO] 2026-03-03 12:31:38,673 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 12:31:38,813 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:31:38,818 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:32:01,670 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:32:01,774 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:32:02,009 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:32:02,042 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:57:14,406 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:57:19,412 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:57:51,506 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:57:51,001 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:58:35,490 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:58:35,670 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:58:35,675 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 12:58:35,708 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 12:59:42,431 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-03 12:59:42,833 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-03 12:59:45,012 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-03 12:59:49,275 views - [UPLOAD] Document saved to DB: 3bca59c0-bbad-467a-ab4e-afef793d6370
+[INFO] 2026-03-03 12:59:50,051 views - [UPLOAD] Triggering chatbot indexing for document 3bca59c0-bbad-467a-ab4e-afef793d6370...
+[INFO] 2026-03-03 12:59:52,655 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\03\Saheer_Resume.pdf
+[INFO] 2026-03-03 12:59:52,655 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 12:59:52,975 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=256d4c6f-bcbd-4a89-9ca1-02a693b16a89 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[ERROR] 2026-03-03 12:59:56,874 webhook_sender - [WEBHOOK] Connection error attempt=1: HTTPConnectionPool(host='127.0.0.1', port=8002): Max retries exceeded with url: /api/chat/webhooks/index-document/ (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=8002): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+[INFO] 2026-03-03 12:59:56,966 webhook_sender - [WEBHOOK] Retrying in 1s (attempt 2/3)...
+[ERROR] 2026-03-03 13:00:00,016 webhook_sender - [WEBHOOK] Connection error attempt=2: HTTPConnectionPool(host='127.0.0.1', port=8002): Max retries exceeded with url: /api/chat/webhooks/index-document/ (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=8002): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))
+[INFO] 2026-03-03 13:00:00,018 webhook_sender - [WEBHOOK] Retrying in 2s (attempt 3/3)...
+[INFO] 2026-03-03 13:00:03,125 webhook_sender - [WEBHOOK] Response attempt=3 status=202 body={"message":"Indexing started (background thread)","document_id":"3bca59c0-bbad-467a-ab4e-afef793d6370","status":"processing"}
+[INFO] 2026-03-03 13:00:03,150 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=3/3
+[INFO] 2026-03-03 13:00:03,177 webhook_sender - [WEBHOOK] Document 3bca59c0-bbad-467a-ab4e-afef793d6370 -> status=processing
+[INFO] 2026-03-03 13:00:03,179 views - [UPLOAD] Document 3bca59c0-bbad-467a-ab4e-afef793d6370 queued for indexing successfully
+[INFO] 2026-03-03 13:00:03,226 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-03 13:00:03,273 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:03,680 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:08,789 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:09,053 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:13,728 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:13,997 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:18,742 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:18,789 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:23,738 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:23,852 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:28,723 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:28,907 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:33,729 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:33,765 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:38,718 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:39,554 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:43,732 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:43,744 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:48,718 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:48,736 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:00:53,721 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:00:53,726 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:01:09,128 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:01:09,140 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:01:09,160 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:01:09,454 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:01:09,463 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:01:09,479 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:01:13,727 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:01:13,732 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:01:18,722 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:01:18,744 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:01:23,733 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:01:24,081 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 13:02:41,608 log - "OPTIONS /api/doc/documents/3bca59c0-bbad-467a-ab4e-afef793d6370/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 13:02:41,612 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/3bca59c0-bbad-467a-ab4e-afef793d6370/
+[INFO] 2026-03-03 13:02:41,665 views - DELETE request for document 3bca59c0-bbad-467a-ab4e-afef793d6370
+[INFO] 2026-03-03 13:02:41,875 views - Physical file deleted: Saheer_Resume.pdf
+[INFO] 2026-03-03 13:02:43,422 views - Deleted 1 access logs for document 3bca59c0-bbad-467a-ab4e-afef793d6370
+[INFO] 2026-03-03 13:02:43,887 views - Deleted 0 chunks for document 3bca59c0-bbad-467a-ab4e-afef793d6370
+[INFO] 2026-03-03 13:02:45,381 views - Document 3bca59c0-bbad-467a-ab4e-afef793d6370 deleted from database successfully
+[INFO] 2026-03-03 13:02:45,501 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=0482ac98-21b7-4ea1-a055-ed9ef62335be -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-03 13:03:02,741 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"status":"accepted","document_id":"3bca59c0-bbad-467a-ab4e-afef793d6370","message":"Document deletion queued"}
+[INFO] 2026-03-03 13:03:02,742 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-03 13:03:02,743 views - Triggered deletion webhook for 3bca59c0-bbad-467a-ab4e-afef793d6370
+[INFO] 2026-03-03 13:03:02,744 log - "DELETE /api/doc/documents/3bca59c0-bbad-467a-ab4e-afef793d6370/ HTTP/1.1" 200 58
+[INFO] 2026-03-03 13:03:02,786 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:03:02,790 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 13:14:08,897 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:14:09,846 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 13:14:10,102 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:14:10,187 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 13:14:56,401 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-03 13:14:56,403 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-03 13:14:56,443 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-03 13:14:56,894 views - [UPLOAD] Document saved to DB: 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2
+[INFO] 2026-03-03 13:14:57,399 views - [UPLOAD] Triggering chatbot indexing for document 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2...
+[INFO] 2026-03-03 13:14:57,604 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\03\Saheer_Resume.pdf
+[INFO] 2026-03-03 13:14:57,604 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 13:14:57,607 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=1c63a408-8258-4a57-b4b2-9ebea28febf7 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 13:14:57,821 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2","status":"processing"}
+[INFO] 2026-03-03 13:14:57,834 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-03 13:14:57,843 webhook_sender - [WEBHOOK] Document 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2 -> status=processing
+[INFO] 2026-03-03 13:14:57,845 views - [UPLOAD] Document 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2 queued for indexing successfully
+[INFO] 2026-03-03 13:14:57,849 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-03 13:14:57,938 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:14:57,947 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:15:03,022 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:15:03,033 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:15:08,037 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:15:08,043 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 13:15:13,022 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:15:13,034 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 13:15:20,746 log - "OPTIONS /api/doc/documents/859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 13:15:20,779 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2/
+[INFO] 2026-03-03 13:15:20,934 views - DELETE request for document 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2
+[INFO] 2026-03-03 13:15:20,952 views - Physical file deleted: Saheer_Resume.pdf
+[INFO] 2026-03-03 13:15:21,059 views - Deleted 1 access logs for document 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2
+[INFO] 2026-03-03 13:15:21,062 views - Deleted 0 chunks for document 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2
+[INFO] 2026-03-03 13:15:21,064 views - Document 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2 deleted from database successfully
+[INFO] 2026-03-03 13:15:21,126 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=1c79bbe0-f1a0-4136-acf5-908720549b98 -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-03 13:15:21,607 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"status":"accepted","document_id":"859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2","message":"Document deletion queued"}
+[INFO] 2026-03-03 13:15:21,608 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-03 13:15:21,609 views - Triggered deletion webhook for 859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2
+[INFO] 2026-03-03 13:15:21,610 log - "DELETE /api/doc/documents/859339ed-d3aa-4ecb-a9f7-2c57c15bfcd2/ HTTP/1.1" 200 58
+[INFO] 2026-03-03 13:15:21,625 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 13:15:21,630 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:31:49,887 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 14:31:49,864 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 14:31:51,605 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:31:58,804 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:31:58,979 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:31:59,129 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:32:58,346 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:32:58,354 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:32:58,381 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:32:58,429 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:33:15,836 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:33:15,881 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:33:39,230 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-03 14:33:39,231 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-03 14:33:39,438 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-03 14:33:39,821 views - [UPLOAD] Document saved to DB: c4a62cce-13a0-4fec-b33b-d43a7d790f21
+[INFO] 2026-03-03 14:33:40,397 views - [UPLOAD] Triggering chatbot indexing for document c4a62cce-13a0-4fec-b33b-d43a7d790f21...
+[INFO] 2026-03-03 14:33:40,715 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\03\Saheer_Resume.pdf
+[INFO] 2026-03-03 14:33:40,716 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 14:33:40,717 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=999082c7-fdeb-4033-ab97-f7fab679be38 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 14:33:41,979 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"c4a62cce-13a0-4fec-b33b-d43a7d790f21","status":"processing"}
+[INFO] 2026-03-03 14:33:41,983 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-03 14:33:42,021 webhook_sender - [WEBHOOK] Document c4a62cce-13a0-4fec-b33b-d43a7d790f21 -> status=processing
+[INFO] 2026-03-03 14:33:42,023 views - [UPLOAD] Document c4a62cce-13a0-4fec-b33b-d43a7d790f21 queued for indexing successfully
+[INFO] 2026-03-03 14:33:42,026 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-03 14:33:42,035 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:33:42,056 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:33:47,152 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:33:47,163 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:33:52,133 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:33:52,137 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:33:57,124 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:33:57,133 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:34:02,128 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:02,136 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:34:07,139 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:07,144 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:34:12,128 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:12,138 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:34:17,129 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:17,138 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:34:22,136 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:22,145 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:34:27,220 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:27,238 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 14:34:32,132 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:32,138 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 14:34:47,417 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:47,444 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 14:34:57,211 log - "OPTIONS /api/doc/documents/c4a62cce-13a0-4fec-b33b-d43a7d790f21/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 14:34:57,215 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/c4a62cce-13a0-4fec-b33b-d43a7d790f21/
+[INFO] 2026-03-03 14:34:57,237 views - DELETE request for document c4a62cce-13a0-4fec-b33b-d43a7d790f21
+[INFO] 2026-03-03 14:34:57,246 views - Physical file deleted: Saheer_Resume.pdf
+[INFO] 2026-03-03 14:34:57,325 views - Deleted 1 access logs for document c4a62cce-13a0-4fec-b33b-d43a7d790f21
+[INFO] 2026-03-03 14:34:57,329 views - Deleted 0 chunks for document c4a62cce-13a0-4fec-b33b-d43a7d790f21
+[INFO] 2026-03-03 14:34:57,331 views - Document c4a62cce-13a0-4fec-b33b-d43a7d790f21 deleted from database successfully
+[INFO] 2026-03-03 14:34:57,358 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=ae5ece7e-b2d9-4529-81eb-be768b61d79a -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-03 14:34:58,344 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"status":"accepted","document_id":"c4a62cce-13a0-4fec-b33b-d43a7d790f21","message":"Document deletion queued"}
+[INFO] 2026-03-03 14:34:58,345 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[INFO] 2026-03-03 14:34:58,347 views - Triggered deletion webhook for c4a62cce-13a0-4fec-b33b-d43a7d790f21
+[INFO] 2026-03-03 14:34:58,348 log - "DELETE /api/doc/documents/c4a62cce-13a0-4fec-b33b-d43a7d790f21/ HTTP/1.1" 200 58
+[INFO] 2026-03-03 14:34:58,360 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:34:58,365 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:35:32,687 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:35:32,707 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:35:32,712 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:35:32,716 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:35:40,881 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:35:40,901 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:35:41,129 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:35:41,212 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:36:22,521 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:36:22,526 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:36:22,536 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:36:22,540 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:36:37,155 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:36:37,161 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:45:23,449 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:45:23,744 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:45:23,767 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:45:23,778 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:45:37,052 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:45:37,058 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:50:36,671 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:50:36,675 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 14:50:36,678 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 14:50:36,683 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 15:00:05,561 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 15:00:05,901 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 15:25:50,379 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 15:25:50,645 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 15:25:50,677 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 15:25:50,847 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:15:54,090 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:15:58,804 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:15:59,245 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:15:59,308 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:19:26,595 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:19:26,655 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:19:26,687 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:19:26,806 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:19:44,099 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:19:44,149 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:19:53,417 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:19:53,443 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:20:01,349 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:20:01,358 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:21:19,672 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:21:19,750 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:21:20,122 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:21:20,218 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:23:19,007 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:23:19,176 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:23:19,285 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:23:19,318 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:24:42,655 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:24:42,729 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:24:42,743 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:24:42,751 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:27:29,892 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:27:29,965 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:27:30,025 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:27:30,168 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:28:10,053 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:28:10,073 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:28:14,329 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:28:14,357 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:32:37,641 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 16:32:37,642 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 16:32:37,662 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:32:37,738 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:32:37,754 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:32:37,758 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:32:47,162 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:32:47,168 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:33:39,707 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:33:39,885 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:33:51,661 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:33:51,671 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:34:12,666 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-03 16:34:12,779 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-03 16:34:13,200 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-03 16:34:13,912 views - [UPLOAD] Document saved to DB: d77de751-f382-46c6-8c2f-05ac9c015e36
+[INFO] 2026-03-03 16:34:14,455 views - [UPLOAD] Triggering chatbot indexing for document d77de751-f382-46c6-8c2f-05ac9c015e36...
+[INFO] 2026-03-03 16:34:14,822 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\03\Saheer_Resume.pdf
+[INFO] 2026-03-03 16:34:14,822 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 16:34:14,823 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=f5c27a3b-be8f-4833-b413-5718917f373b -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-03 16:34:18,657 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"d77de751-f382-46c6-8c2f-05ac9c015e36","status":"processing"}
+[INFO] 2026-03-03 16:34:18,659 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-03 16:34:18,667 webhook_sender - [WEBHOOK] Document d77de751-f382-46c6-8c2f-05ac9c015e36 -> status=processing
+[INFO] 2026-03-03 16:34:18,667 views - [UPLOAD] Document d77de751-f382-46c6-8c2f-05ac9c015e36 queued for indexing successfully
+[INFO] 2026-03-03 16:34:18,676 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-03 16:34:18,765 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:18,808 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:34:23,876 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:23,884 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:34:26,789 log - "GET /media/documents/2026/03/03/Saheer_Resume.pdf HTTP/1.1" 200 58130
+[INFO] 2026-03-03 16:34:29,866 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:29,874 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:34:33,868 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:33,882 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[WARNING] 2026-03-03 16:34:37,043 log - Not Found: /favicon.ico
+[INFO] 2026-03-03 16:34:37,131 basehttp - - Broken pipe from ('127.0.0.1', 51305)
+[INFO] 2026-03-03 16:34:38,883 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:38,888 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:34:43,872 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:43,889 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:34:48,941 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:48,971 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:34:53,871 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:53,907 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:34:58,873 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:34:58,879 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-03 16:35:03,862 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:35:03,869 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 16:35:35,370 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:35:35,589 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 16:35:36,642 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:35:36,806 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 16:42:25,440 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:42:25,660 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 16:42:25,842 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:42:25,911 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 16:44:18,463 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:44:18,478 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-03 16:45:25,355 log - "OPTIONS /api/doc/documents/d77de751-f382-46c6-8c2f-05ac9c015e36/ HTTP/1.1" 200 0
+[INFO] 2026-03-03 16:45:25,391 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/d77de751-f382-46c6-8c2f-05ac9c015e36/
+[INFO] 2026-03-03 16:45:25,473 views - DELETE request for document d77de751-f382-46c6-8c2f-05ac9c015e36
+[INFO] 2026-03-03 16:45:25,606 views - Physical file deleted: Saheer_Resume.pdf
+[INFO] 2026-03-03 16:45:25,681 views - Deleted 1 access logs for document d77de751-f382-46c6-8c2f-05ac9c015e36
+[INFO] 2026-03-03 16:45:25,805 views - Deleted 0 chunks for document d77de751-f382-46c6-8c2f-05ac9c015e36
+[INFO] 2026-03-03 16:45:25,834 views - Document d77de751-f382-46c6-8c2f-05ac9c015e36 deleted from database successfully
+[INFO] 2026-03-03 16:45:26,110 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=6cf203d4-5a72-423a-b032-a2b86d7bc8b0 -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-03 16:45:29,868 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/d77de751-f382-46c6-8c2f-05ac9c015e36/
+[INFO] 2026-03-03 16:45:29,978 views - DELETE request for document d77de751-f382-46c6-8c2f-05ac9c015e36
+[INFO] 2026-03-03 16:45:30,270 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"status":"accepted","document_id":"d77de751-f382-46c6-8c2f-05ac9c015e36","message":"Document deletion queued"}
+[INFO] 2026-03-03 16:45:30,279 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=1/3
+[WARNING] 2026-03-03 16:45:30,370 views - Delete requested for non-existent document d77de751-f382-46c6-8c2f-05ac9c015e36
+[INFO] 2026-03-03 16:45:30,370 views - Triggered deletion webhook for d77de751-f382-46c6-8c2f-05ac9c015e36
+[WARNING] 2026-03-03 16:45:30,413 log - Not Found: /api/doc/documents/d77de751-f382-46c6-8c2f-05ac9c015e36/
+[INFO] 2026-03-03 16:45:30,414 log - "DELETE /api/doc/documents/d77de751-f382-46c6-8c2f-05ac9c015e36/ HTTP/1.1" 200 58
+[WARNING] 2026-03-03 16:45:30,507 log - "DELETE /api/doc/documents/d77de751-f382-46c6-8c2f-05ac9c015e36/ HTTP/1.1" 404 30
+[INFO] 2026-03-03 16:45:30,688 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:45:30,726 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:46:24,086 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:46:24,092 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-03 16:46:24,183 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-03 16:46:24,234 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 11:52:22,969 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-04 12:41:22,852 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-04 12:41:22,880 log - "OPTIONS /api/doc/documents/ HTTP/1.1" 200 0
+[INFO] 2026-03-04 12:41:23,039 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:41:23,939 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:41:24,005 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:41:24,025 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:41:27,772 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:41:27,778 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:41:27,810 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:41:27,816 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:41:40,763 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:41:41,051 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:41:58,103 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:41:58,107 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:41:58,124 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:41:58,130 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:42:03,629 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:42:03,658 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:42:03,779 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:42:03,830 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:42:47,897 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:42:48,084 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:42:48,158 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:42:48,197 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:44:37,403 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:44:37,426 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:44:37,535 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:44:37,555 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 12:44:59,617 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 12:44:59,630 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 13:49:57,609 autoreload - C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\doc_service\models.py changed, reloading.
+[INFO] 2026-03-04 13:50:16,875 autoreload - Watching for file changes with StatReloader
+[INFO] 2026-03-04 13:55:32,072 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 13:55:32,697 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 13:55:48,590 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-04 13:55:48,601 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-04 13:55:48,609 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-04 13:55:48,917 views - [UPLOAD] Document saved to DB: 1889470c-471e-4848-8711-cc37d38f6618
+[INFO] 2026-03-04 13:55:50,540 views - [UPLOAD] Triggering chatbot indexing for document 1889470c-471e-4848-8711-cc37d38f6618...
+[INFO] 2026-03-04 13:55:54,757 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\04\Saheer_Resume.pdf
+[INFO] 2026-03-04 13:55:54,757 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-04 13:55:54,758 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=59f3a5ca-d9c8-4935-89ec-21eda2043177 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[WARNING] 2026-03-04 13:56:24,783 webhook_sender - [WEBHOOK] Timeout attempt=1/3
+[INFO] 2026-03-04 13:56:24,786 webhook_sender - [WEBHOOK] Retrying in 1s (attempt 2/3)...
+[WARNING] 2026-03-04 13:56:55,814 webhook_sender - [WEBHOOK] Timeout attempt=2/3
+[INFO] 2026-03-04 13:56:55,815 webhook_sender - [WEBHOOK] Retrying in 2s (attempt 3/3)...
+[WARNING] 2026-03-04 13:57:27,825 webhook_sender - [WEBHOOK] Timeout attempt=3/3
+[ERROR] 2026-03-04 13:57:27,826 webhook_sender - [WEBHOOK] FAILED event='document.uploaded' after 3 attempts. Last error: Timeout on attempt 3
+[INFO] 2026-03-04 13:57:27,916 webhook_sender - [WEBHOOK] Document 1889470c-471e-4848-8711-cc37d38f6618 -> status=failed
+[WARNING] 2026-03-04 13:57:27,917 views - [UPLOAD] Document 1889470c-471e-4848-8711-cc37d38f6618 saved but indexing failed. Use the re-index endpoint to retry.
+[INFO] 2026-03-04 13:57:28,418 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-04 13:57:28,488 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 13:57:28,496 log - "GET /api/doc/documents/ HTTP/1.1" 200 500
+[INFO] 2026-03-04 14:23:05,711 log - "OPTIONS /api/doc/documents/1889470c-471e-4848-8711-cc37d38f6618/ HTTP/1.1" 200 0
+[INFO] 2026-03-04 14:23:05,952 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/1889470c-471e-4848-8711-cc37d38f6618/
+[INFO] 2026-03-04 14:23:06,313 views - DELETE request for document 1889470c-471e-4848-8711-cc37d38f6618
+[INFO] 2026-03-04 14:23:07,366 views - Physical file deleted: Saheer_Resume.pdf
+[INFO] 2026-03-04 14:23:07,930 views - Deleted 1 access logs for document 1889470c-471e-4848-8711-cc37d38f6618
+[INFO] 2026-03-04 14:23:08,037 views - Deleted 0 chunks for document 1889470c-471e-4848-8711-cc37d38f6618
+[INFO] 2026-03-04 14:23:08,111 views - Document 1889470c-471e-4848-8711-cc37d38f6618 deleted from database successfully
+[INFO] 2026-03-04 14:23:10,731 webhook_sender - [WEBHOOK] >> Sending event='document.deleted' delivery=e801c10f-977c-4cd7-bc3a-8fda6abc808b -> http://127.0.0.1:8002/api/chat/webhooks/delete-document/
+[INFO] 2026-03-04 14:23:14,250 middleware - [Tenant: black_rigs] DELETE /api/doc/documents/1889470c-471e-4848-8711-cc37d38f6618/
+[INFO] 2026-03-04 14:23:14,320 views - DELETE request for document 1889470c-471e-4848-8711-cc37d38f6618
+[WARNING] 2026-03-04 14:23:14,567 views - Delete requested for non-existent document 1889470c-471e-4848-8711-cc37d38f6618
+[WARNING] 2026-03-04 14:23:14,774 log - Not Found: /api/doc/documents/1889470c-471e-4848-8711-cc37d38f6618/
+[WARNING] 2026-03-04 14:23:14,777 log - "DELETE /api/doc/documents/1889470c-471e-4848-8711-cc37d38f6618/ HTTP/1.1" 404 30
+[INFO] 2026-03-04 14:23:24,098 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:23:25,034 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 14:23:25,038 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:23:25,076 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[WARNING] 2026-03-04 14:23:41,624 webhook_sender - [WEBHOOK] Timeout attempt=1/3
+[INFO] 2026-03-04 14:23:41,625 webhook_sender - [WEBHOOK] Retrying in 1s (attempt 2/3)...
+[INFO] 2026-03-04 14:24:02,212 webhook_sender - [WEBHOOK] Response attempt=2 status=202 body={"status":"accepted","document_id":"1889470c-471e-4848-8711-cc37d38f6618","message":"Document deletion queued"}
+[INFO] 2026-03-04 14:24:02,229 webhook_sender - [WEBHOOK] OK SUCCESS event='document.deleted' attempt=2/3
+[INFO] 2026-03-04 14:24:02,237 views - Triggered deletion webhook for 1889470c-471e-4848-8711-cc37d38f6618
+[INFO] 2026-03-04 14:24:02,456 basehttp - - Broken pipe from ('127.0.0.1', 53953)
+[INFO] 2026-03-04 14:26:07,828 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:07,831 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 14:26:07,834 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:07,839 log - "GET /api/doc/documents/ HTTP/1.1" 200 2
+[INFO] 2026-03-04 14:26:17,832 middleware - [Tenant: black_rigs] POST /api/doc/documents/
+[INFO] 2026-03-04 14:26:17,835 views - [UPLOAD] User: 4fe92302-fbbd-4b19-a914-f7be0d228e5e, Tenant: black_rigs
+[INFO] 2026-03-04 14:26:17,916 views - [UPLOAD] File: Saheer_Resume.pdf (58130 bytes)
+[INFO] 2026-03-04 14:26:18,088 views - [UPLOAD] Document saved to DB: 0310c11a-23c8-47ac-886f-fce5201d1038
+[INFO] 2026-03-04 14:26:18,604 views - [UPLOAD] Triggering chatbot indexing for document 0310c11a-23c8-47ac-886f-fce5201d1038...
+[INFO] 2026-03-04 14:26:18,642 webhook_events - [EVENT] File path: C:\Users\CHUNGATH\Desktop\TenantIQ\Project_three\document_service\media\documents\2026\03\04\Saheer_Resume.pdf
+[INFO] 2026-03-04 14:26:18,642 webhook_events - [EVENT] Endpoint: http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-04 14:26:18,643 webhook_sender - [WEBHOOK] >> Sending event='document.uploaded' delivery=26548b17-9253-439e-9953-4d0cc6e673d0 -> http://127.0.0.1:8002/api/chat/webhooks/index-document/
+[INFO] 2026-03-04 14:26:18,979 webhook_sender - [WEBHOOK] Response attempt=1 status=202 body={"message":"Indexing started (background thread)","document_id":"0310c11a-23c8-47ac-886f-fce5201d1038","status":"processing"}
+[INFO] 2026-03-04 14:26:18,986 webhook_sender - [WEBHOOK] OK SUCCESS event='document.uploaded' attempt=1/3
+[INFO] 2026-03-04 14:26:18,997 webhook_sender - [WEBHOOK] Document 0310c11a-23c8-47ac-886f-fce5201d1038 -> status=processing
+[INFO] 2026-03-04 14:26:18,999 views - [UPLOAD] Document 0310c11a-23c8-47ac-886f-fce5201d1038 queued for indexing successfully
+[INFO] 2026-03-04 14:26:19,003 log - "POST /api/doc/documents/ HTTP/1.1" 201 582
+[INFO] 2026-03-04 14:26:19,032 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:19,040 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-04 14:26:24,085 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:24,090 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-04 14:26:29,682 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:29,753 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-04 14:26:34,111 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:34,118 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-04 14:26:39,084 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:39,090 log - "GET /api/doc/documents/ HTTP/1.1" 200 504
+[INFO] 2026-03-04 14:26:44,080 middleware - [Tenant: black_rigs] GET /api/doc/documents/
+[INFO] 2026-03-04 14:26:44,130 log - "GET /api/doc/documents/ HTTP/1.1" 200 500

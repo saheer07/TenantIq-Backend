@@ -9,10 +9,11 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.conf import settings
 import traceback
-import requests
 import logging
 import time
 import os
+from django.db import transaction
+from django.http import Http404
 
 from .models import (
     Document,
@@ -28,6 +29,7 @@ from .serializers import (
     DocumentAccessLogSerializer,
     DocumentUploadSerializer,
     BulkDocumentOperationSerializer,
+    ActiveDocumentIDSerializer,
 )
 from .authentication import MicroserviceJWTAuthentication, APIKeyAuthentication
 from .webhook_events import (
@@ -315,11 +317,13 @@ class DocumentDetailView(APIView):
             log_document_access(document, request.user.id, 'view', request)
             serializer = DocumentSerializer(document, context={'request': request})
             return Response(serializer.data)
+        except (Document.DoesNotExist, Http404):
+            return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
         except PermissionError as e:
             return Response({"error": str(e)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             logger.error(f"Error viewing document {pk}: {str(e)}")
-            return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "An unexpected error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @require_tenant
     def put(self, request, pk):
@@ -338,6 +342,8 @@ class DocumentDetailView(APIView):
 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        except (Document.DoesNotExist, Http404):
+            return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
         except PermissionError as e:
             return Response({"error": str(e)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
@@ -357,35 +363,47 @@ class DocumentDetailView(APIView):
             document_id = document.id
             file_name = document.file_name
 
-            # Step 1: Delete related records first
-            access_log_count = DocumentAccessLog.objects.filter(document_id=document_id).count()
-            DocumentAccessLog.objects.filter(document_id=document_id).delete()
-            logger.info(f"Deleted {access_log_count} access logs for document {document_id}")
+            # We keep document_id and tenant_id strings for the webhook
+            tenant_id_str = str(request.tenant_id)
+            doc_id_str = str(document_id)
 
-            chunk_count = DocumentChunk.objects.filter(document_id=document_id).count()
-            DocumentChunk.objects.filter(document_id=document_id).delete()
-            logger.info(f"Deleted {chunk_count} chunks for document {document_id}")
-
-            # Step 2: Delete the physical file
+            # Step 1: Capture file path and delete physical file first
             if document.file:
                 try:
-                    document.file.delete(save=False)
-                    logger.info(f"File deleted: {file_name}")
+                    file_path = document.file.path
+                    if os.path.exists(file_path):
+                        document.file.delete(save=False)
+                        logger.info(f"Physical file deleted: {file_name}")
                 except Exception as e:
-                    logger.warning(f"Could not delete file: {e}")
+                    logger.warning(f"Could not delete physical file: {e}")
 
-            # Step 3: Trigger deletion sync with chatbot service
-            trigger_document_deleted(str(document_id), str(request.tenant_id))
+            # Step 2: Delete related records and the document itself atomically
+            with transaction.atomic():
+                access_log_count, _ = DocumentAccessLog.objects.filter(document_id=document_id).delete()
+                logger.info(f"Deleted {access_log_count} access logs for document {document_id}")
 
-            # Step 4: Delete the document record
-            document.delete()
-            logger.info(f"Document {pk} deleted successfully")
+                chunk_count, _ = DocumentChunk.objects.filter(document_id=document_id).delete()
+                logger.info(f"Deleted {chunk_count} chunks for document {document_id}")
+
+                document.delete()
+                logger.info(f"Document {pk} deleted from database successfully")
+
+            # Step 3: Trigger deletion sync with chatbot service (NON-BLOCKING/FIRE-AND-FORGETish)
+            try:
+                trigger_document_deleted(doc_id_str, tenant_id_str)
+                logger.info(f"Triggered deletion webhook for {doc_id_str}")
+            except Exception as e:
+                logger.error(f"Failed to trigger deletion webhook for {doc_id_str}: {e}")
+                # We don't fail the request here, as the document is already gone locally
 
             return Response(
                 {"success": True, "message": "Document deleted successfully"},
                 status=status.HTTP_200_OK
             )
 
+        except (Document.DoesNotExist, Http404):
+            logger.warning(f"Delete requested for non-existent document {pk}")
+            return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
         except PermissionError as e:
             return Response({"error": str(e)}, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
@@ -602,7 +620,7 @@ class BulkDocumentOperationsView(APIView):
                         try:
                             doc.file.delete(save=False)
                         except Exception as e:
-                            logger.warning(f"Could not delete file for doc {doc.id}: {e}")
+                            logger.warning(f"Could delete file for doc {doc.id}: {e}")
 
                 documents.delete()
                 return Response({"message": f"{count} documents deleted successfully"})
@@ -655,3 +673,24 @@ class BulkDocumentOperationsView(APIView):
                 {"error": f"Bulk operation failed: {str(e)}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+class ActiveDocumentIDsView(APIView):
+    """
+    Internal endpoint for chatbot service to audit/reconcile active documents.
+    Returns a list of all (tenant_id, document_id) tuples.
+    """
+    authentication_classes = [APIKeyAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            documents = Document.objects.all().only('id', 'tenant_id')
+            serializer = ActiveDocumentIDSerializer(documents, many=True)
+            return Response({
+                "count": documents.count(),
+                "documents": serializer.data
+            })
+        except Exception as e:
+            logger.error(f"Error fetching active doc IDs: {e}")
+            return Response({"error": "Failed to fetch IDs"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
